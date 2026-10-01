@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -25,17 +24,6 @@ class Inscripcion(models.Model):
 
 	class Meta:
 		ordering = ['-fecha_inscripcion']
-
-	def clean(self):
-		"""Valida que el archivo asociado sea un PDF."""
-		errores = {}
-		if self.archivo_pdf:
-			nombre = self.archivo_pdf.name.lower()
-			tipo = getattr(self.archivo_pdf, 'content_type', '')
-			if not nombre.endswith('.pdf') or tipo != 'application/pdf':
-				errores['archivo_pdf'] = 'El archivo debe ser un PDF válido.'
-		if errores:
-			raise ValidationError(errores)
 
 	def __str__(self):
 		"""Devuelve una representación legible de la inscripción."""

@@ -128,70 +128,71 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+if DEBUG:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    SUPABASE_STORAGE_SETTINGS = {
+        'access_key': os.environ.get('SUPABASE_ACCESS_KEY'),
+        'secret_key': os.environ.get('SUPABASE_SECRET_KEY'),
+        'bucket': os.environ.get('SUPABASE_BUCKET'),
+        'endpoint': os.environ.get('SUPABASE_ENDPOINT'),
+    }
+    supabase_values_present = [bool(value) for value in SUPABASE_STORAGE_SETTINGS.values()]
 
-SUPABASE_STORAGE_SETTINGS = {
-    'access_key': os.environ.get('SUPABASE_ACCESS_KEY'),
-    'secret_key': os.environ.get('SUPABASE_SECRET_KEY'),
-    'bucket': os.environ.get('SUPABASE_BUCKET'),
-    'endpoint': os.environ.get('SUPABASE_ENDPOINT'),
-}
-supabase_values_present = [bool(value) for value in SUPABASE_STORAGE_SETTINGS.values()]
-
-if any(supabase_values_present) and not all(supabase_values_present):
-    raise ImproperlyConfigured(
-        'Define all four SUPABASE storage environment variables together.'
-    )
-
-USE_SUPABASE_STORAGE = all(supabase_values_present)
-if (not DEBUG or RENDER_EXTERNAL_HOSTNAME) and not USE_SUPABASE_STORAGE:
-    raise ImproperlyConfigured(
-        'Supabase storage environment variables are required in production.'
-    )
-
-STATICFILES_BACKEND = (
-    'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    if not DEBUG
-    else 'django.contrib.staticfiles.storage.StaticFilesStorage'
-)
-
-STORAGES = {
-    'default': {
-        'BACKEND': 'storages.backends.s3.S3Storage'
-        if USE_SUPABASE_STORAGE
-        else 'django.core.files.storage.FileSystemStorage',
-    },
-    'staticfiles': {
-        'BACKEND': STATICFILES_BACKEND,
-    },
-}
-
-if USE_SUPABASE_STORAGE:
-    endpoint_host = urlsplit(SUPABASE_STORAGE_SETTINGS['endpoint']).hostname or ''
-    supabase_s3_suffix = '.storage.supabase.co'
-    if not endpoint_host.endswith(supabase_s3_suffix):
+    if any(supabase_values_present) and not all(supabase_values_present):
         raise ImproperlyConfigured(
-            'SUPABASE_ENDPOINT must use the *.storage.supabase.co hostname.'
+            'Define all four SUPABASE storage environment variables together.'
         )
 
-    project_ref = endpoint_host[:-len(supabase_s3_suffix)]
-    public_domain = (
-        f'{project_ref}.supabase.co/storage/v1/object/public/'
-        f"{SUPABASE_STORAGE_SETTINGS['bucket']}"
-    )
-    MEDIA_URL = f'https://{public_domain}/'
+    USE_SUPABASE_STORAGE = all(supabase_values_present)
+    if (not DEBUG or RENDER_EXTERNAL_HOSTNAME) and not USE_SUPABASE_STORAGE:
+        raise ImproperlyConfigured(
+            'Supabase storage environment variables are required in production.'
+        )
 
-    AWS_ACCESS_KEY_ID = SUPABASE_STORAGE_SETTINGS['access_key']
-    AWS_SECRET_ACCESS_KEY = SUPABASE_STORAGE_SETTINGS['secret_key']
-    AWS_STORAGE_BUCKET_NAME = SUPABASE_STORAGE_SETTINGS['bucket']
-    AWS_S3_ENDPOINT_URL = SUPABASE_STORAGE_SETTINGS['endpoint']
-    AWS_S3_REGION_NAME = 'us-east-1'
-    AWS_S3_ADDRESSING_STYLE = 'path'
-    AWS_S3_SIGNATURE_VERSION = 's3v4'
-    AWS_S3_CUSTOM_DOMAIN = public_domain
-    AWS_QUERYSTRING_AUTH = False
-    AWS_DEFAULT_ACL = None
+    STATICFILES_BACKEND = (
+        'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        if not DEBUG
+        else 'django.contrib.staticfiles.storage.StaticFilesStorage'
+    )
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3.S3Storage'
+            if USE_SUPABASE_STORAGE
+            else 'django.core.files.storage.FileSystemStorage',
+        },
+        'staticfiles': {
+            'BACKEND': STATICFILES_BACKEND,
+        },
+    }
+
+    if USE_SUPABASE_STORAGE:
+        endpoint_host = urlsplit(SUPABASE_STORAGE_SETTINGS['endpoint']).hostname or ''
+        supabase_s3_suffix = '.storage.supabase.co'
+        if not endpoint_host.endswith(supabase_s3_suffix):
+            raise ImproperlyConfigured(
+                'SUPABASE_ENDPOINT must use the *.storage.supabase.co hostname.'
+            )
+
+        project_ref = endpoint_host[:-len(supabase_s3_suffix)]
+        public_domain = (
+            f'{project_ref}.supabase.co/storage/v1/object/public/'
+            f"{SUPABASE_STORAGE_SETTINGS['bucket']}"
+        )
+        MEDIA_URL = f'https://{public_domain}/'
+
+        AWS_ACCESS_KEY_ID = SUPABASE_STORAGE_SETTINGS['access_key']
+        AWS_SECRET_ACCESS_KEY = SUPABASE_STORAGE_SETTINGS['secret_key']
+        AWS_STORAGE_BUCKET_NAME = SUPABASE_STORAGE_SETTINGS['bucket']
+        AWS_S3_ENDPOINT_URL = SUPABASE_STORAGE_SETTINGS['endpoint']
+        AWS_S3_REGION_NAME = 'us-east-1'
+        AWS_S3_ADDRESSING_STYLE = 'path'
+        AWS_S3_SIGNATURE_VERSION = 's3v4'
+        AWS_S3_CUSTOM_DOMAIN = public_domain
+        AWS_QUERYSTRING_AUTH = False
+        AWS_DEFAULT_ACL = None
 
 
 # Email

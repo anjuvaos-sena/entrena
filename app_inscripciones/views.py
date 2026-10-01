@@ -42,10 +42,7 @@ def _datos_inscripcion(request):
 	archivo_pdf = request.FILES.get('archivo_pdf')
 	if archivo_pdf is None:
 		errores['archivo_pdf'] = 'Debe adjuntar un archivo PDF.'
-	elif (
-		not archivo_pdf.name.lower().endswith('.pdf')
-		or archivo_pdf.content_type != 'application/pdf'
-	):
+	elif not archivo_pdf.name.lower().endswith('.pdf'):
 		errores['archivo_pdf'] = 'Solo se aceptan archivos PDF.'
 
 	return datos, archivo_pdf, errores
