@@ -1,0 +1,38 @@
+Ajustes de almacenamiento de archivos
+
+1. Cambios realizados
+
+- pr_eni/settings.py ahora configura STORAGES, la interfaz actual de Django para los backends de archivos.
+- En desarrollo, si no hay variables SUPABASE configuradas, los archivos se siguen guardando localmente en MEDIA_ROOT y MEDIA_URL conserva /media/.
+- Cuando están definidas las cuatro variables SUPABASE_ACCESS_KEY, SUPABASE_SECRET_KEY, SUPABASE_BUCKET y SUPABASE_ENDPOINT, el backend predeterminado pasa a django-storages sobre S3. Esto conserva el FileField existente, sin cambios en modelos ni migraciones.
+- En producción la aplicación exige esas cuatro variables para evitar guardar archivos en el disco efímero de Render; Render se detecta por RENDER_EXTERNAL_HOSTNAME, además de DEBUG=False.
+- Las cargas se firman usando el endpoint S3 y las credenciales configuradas. Los enlaces de lectura se generan sin firma sobre la ruta pública de Supabase. El bucket debe tener acceso público habilitado.
+- Los archivos estáticos siguen usando WhiteNoise en producción; no se envían al bucket de medios.
+- requirements.txt incluye django-storages[s3].
+
+2. Variables en Render
+
+En el servicio web, define las cuatro variables con sus valores actuales de Supabase:
+
+- SUPABASE_ACCESS_KEY
+- SUPABASE_SECRET_KEY
+- SUPABASE_BUCKET
+- SUPABASE_ENDPOINT
+
+No agregues comillas alrededor de los valores. El endpoint debe ser la URL S3 de Supabase, con hostname *.storage.supabase.co. Mantén las claves como variables secretas y no las guardes en el repositorio.
+
+3. Despliegue
+
+- Confirma que el servicio instala las dependencias desde requirements.txt; Render normalmente lo hace durante el build.
+- Despliega o reinicia el servicio después de guardar las variables de entorno. Si el build command se administra manualmente, instala las dependencias con: pip install -r requirements.txt
+- No se requieren migraciones de base de datos para este cambio.
+- Envía una inscripción de prueba con un PDF. Comprueba que la URL del archivo tenga el formato https://<project-ref>.supabase.co/storage/v1/object/public/<bucket>/requisitos_inscripciones/<archivo> y que el PDF pueda abrirse sin autenticación.
+- Si la carga falla, revisa los logs de Render y confirma que las claves correspondan a las credenciales S3 de Supabase, que el endpoint esté copiado completo y que el bucket permita acceso público de lectura.
+
+4. Archivos ya cargados
+
+Los registros existentes conservan sus rutas, pero el contenido que solo estaba en la carpeta media local no se copia al bucket automáticamente. Si hay archivos que deban seguir disponibles en producción, súbelos a Supabase conservando exactamente sus rutas relativas guardadas en la base de datos.
+
+5. Seguridad
+
+Las credenciales compartidas en la solicitud deben considerarse expuestas: rótalas en Supabase y actualiza los valores en Render antes del próximo despliegue. No las incluyas en archivos, commits ni mensajes.
