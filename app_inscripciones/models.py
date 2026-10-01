@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
+
 from app_convocatorias.models import Convocatoria
 
 
