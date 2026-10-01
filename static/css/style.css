@@ -1,0 +1,575 @@
+/**
+ * ==========================================================================
+ * SENA - Escuela Nacional de Instructores (ENI)
+ * Sistema de Diseño Fluent Institutional Green
+ * Archivo: style.css
+ * ==========================================================================
+ * Especificación completa de estilos corporativos basada en DESIGN.md
+ * Integración con tipografía Work Sans, tokens semánticos Fluent y
+ * componentes de interfaz listos para producción.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+/* ==========================================================================
+   1. VARIABLES DE DISEÑO & DESIGN TOKENS (DESIGN.md)
+   ========================================================================== */
+:root {
+  /* --- Colores de Marca Institucional --- */
+  --sena-green-primary: #39a900;
+  --sena-green-hover: #2e8b00;
+  --sena-green-active: #257000;
+  --sena-green-light: #eaf8e2;
+  --sena-green-subtle: #f2fbee;
+  --sena-green-border: #a3e382;
+
+  --sena-blue-navy: #00324d;
+  --sena-blue-dark: #0f172a;
+  --sena-blue-surface: #1e293b;
+
+  /* --- Superficies y Fondos Fluent (Light Mode) --- */
+  --fluent-surface: #f7f9fc;
+  --fluent-surface-dim: #e9eef5;
+  --fluent-surface-bright: #ffffff;
+  --fluent-surface-container-lowest: #ffffff;
+  --fluent-surface-container-low: #f1f5f9;
+  --fluent-surface-container: #e2e8f0;
+  --fluent-surface-container-high: #cbd5e1;
+  --fluent-surface-container-highest: #94a3b8;
+
+  /* --- Efectos Fluent Acrylic & Mica --- */
+  --fluent-acrylic-bg: rgba(255, 255, 255, 0.85);
+  --fluent-acrylic-blur: blur(16px);
+  --fluent-card-bg: #ffffff;
+  --fluent-card-border: rgba(226, 232, 240, 0.9);
+  --fluent-card-border-hover: rgba(57, 169, 0, 0.4);
+
+  /* --- Tipografía y Contraste --- */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-on-primary: #ffffff;
+
+  /* --- Estados y Alertas Semánticas --- */
+  --status-open-bg: #ecfdf5;
+  --status-open-text: #059669;
+  --status-open-border: #a7f3d0;
+
+  --status-urgent-bg: #fffbeb;
+  --status-urgent-text: #b45309;
+  --status-urgent-border: #fde68a;
+
+  --status-closed-bg: #fef2f2;
+  --status-closed-text: #b91c1c;
+  --status-closed-border: #fecaca;
+
+  --status-info-bg: #eff6ff;
+  --status-info-text: #1d4ed8;
+  --status-info-border: #bfdbfe;
+
+  /* --- Sombras Fluent Elevation --- */
+  --shadow-fluent-1: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-fluent-2: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-fluent-3: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-fluent-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  --shadow-fluent-card-hover: 0 12px 28px -4px rgba(57, 169, 0, 0.12), 0 6px 12px -2px rgba(15, 23, 42, 0.06);
+
+  /* --- Bordes y Radios --- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* --- Transiciones --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   2. RESET & CONFIGURACIÓN BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--fluent-surface);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   3. TIPOGRAFÍA Y ESCALA JERÁRQUICA
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.25rem; font-weight: 800; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.35rem; font-weight: 600; }
+h4 { font-size: 1.15rem; font-weight: 600; }
+h5 { font-size: 1rem; font-weight: 600; }
+
+p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.text-lead {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+}
+
+.text-sm {
+  font-size: 0.85rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   4. ESTRUCTURA & CONTENEDORES
+   ========================================================================== */
+.sena-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.sena-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .sena-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   5. NAVEGACIÓN SUPERIOR FLUENT
+   ========================================================================== */
+.sena-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--fluent-acrylic-bg);
+  backdrop-filter: var(--fluent-acrylic-blur);
+  -webkit-backdrop-filter: var(--fluent-acrylic-blur);
+  border-bottom: 1px solid var(--fluent-card-border);
+  padding: 0.75rem 0;
+}
+
+.sena-navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.sena-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.sena-brand-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.sena-brand-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--sena-green-primary);
+  line-height: 1.1;
+}
+
+.sena-brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.sena-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.sena-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.sena-nav-link:hover {
+  background-color: var(--fluent-surface-container-low);
+  color: var(--text-primary);
+}
+
+.sena-nav-link.active {
+  background-color: var(--sena-green-primary);
+  color: var(--text-on-primary);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   6. BOTONES (FLUENT BUTTON SYSTEM)
+   ========================================================================== */
+.sena-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  line-height: 1.25;
+}
+
+.sena-btn:focus-visible {
+  outline: 2px solid var(--sena-green-primary);
+  outline-offset: 2px;
+}
+
+/* Primario (Verde SENA) */
+.sena-btn-primary {
+  background-color: var(--sena-green-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(57, 169, 0, 0.25);
+}
+
+.sena-btn-primary:hover {
+  background-color: var(--sena-green-hover);
+  box-shadow: 0 4px 8px rgba(57, 169, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+.sena-btn-primary:active {
+  background-color: var(--sena-green-active);
+  transform: translateY(0);
+}
+
+/* Secundario / Outline */
+.sena-btn-outline {
+  background-color: transparent;
+  border-color: var(--fluent-card-border);
+  color: var(--text-primary);
+}
+
+.sena-btn-outline:hover {
+  background-color: var(--fluent-surface-container-low);
+  border-color: var(--fluent-surface-container-high);
+}
+
+/* Botón de Enlace Sutil */
+.sena-btn-link {
+  background: transparent;
+  border: none;
+  color: var(--sena-green-primary);
+  padding: 0.5rem;
+}
+
+.sena-btn-link:hover {
+  color: var(--sena-green-hover);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   7. TARJETAS FLUENT & MICA CARDS
+   ========================================================================== */
+.fluent-card {
+  background: var(--fluent-card-bg);
+  border: 1px solid var(--fluent-card-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-fluent-card);
+  transition: all var(--transition-normal);
+}
+
+.fluent-card-interactive {
+  cursor: pointer;
+}
+
+.fluent-card-interactive:hover {
+  border-color: var(--fluent-card-border-hover);
+  box-shadow: var(--shadow-fluent-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Banner de Métricas / KPI */
+.sena-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.sena-kpi-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--fluent-card-border);
+  border-radius: var(--radius-lg);
+}
+
+.sena-kpi-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.sena-kpi-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   8. FORMULARIOS, BUSCADORES Y FILTROS
+   ========================================================================== */
+.sena-filter-panel {
+  background: #ffffff;
+  border: 1px solid var(--fluent-card-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-fluent-1);
+}
+
+.sena-search-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sena-search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.sena-input,
+.sena-select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background-color: var(--fluent-surface-container-low);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 0.65rem 1rem;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.sena-input-search {
+  padding-left: 2.75rem;
+  padding-right: 2.5rem;
+  background-color: #ffffff;
+  border-color: var(--fluent-card-border);
+}
+
+.sena-input:focus,
+.sena-select:focus {
+  background-color: #ffffff;
+  border-color: var(--sena-green-primary);
+  box-shadow: 0 0 0 3px var(--sena-green-light);
+}
+
+/* Chips / Badges de Filtro */
+.sena-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background-color: var(--fluent-surface-container);
+  color: var(--text-secondary);
+}
+
+.sena-chip-removable {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.sena-chip-removable:hover {
+  background-color: var(--fluent-surface-container-high);
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   9. BADGES DE ESTADO (CONVOCATORIAS)
+   ========================================================================== */
+.sena-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  border: 1px solid transparent;
+}
+
+.sena-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.sena-badge-open {
+  background-color: var(--status-open-bg);
+  color: var(--status-open-text);
+  border-color: var(--status-open-border);
+}
+.sena-badge-open::before {
+  background-color: var(--status-open-text);
+}
+
+.sena-badge-urgent {
+  background-color: var(--status-urgent-bg);
+  color: var(--status-urgent-text);
+  border-color: var(--status-urgent-border);
+}
+.sena-badge-urgent::before {
+  background-color: var(--status-urgent-text);
+}
+
+.sena-badge-tag {
+  background-color: var(--fluent-surface-container-low);
+  color: var(--text-secondary);
+  border-color: var(--fluent-card-border);
+}
+
+/* ==========================================================================
+   10. BARRAS DE PROGRESO (CUPOS & METAS)
+   ========================================================================== */
+.sena-progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--fluent-surface-container);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.sena-progress-bar {
+  height: 100%;
+  background-color: var(--sena-green-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-smooth);
+}
+
+.sena-progress-bar.warning {
+  background-color: var(--status-urgent-text);
+}
+
+/* ==========================================================================
+   11. FOOTER INSTITUCIONAL
+   ========================================================================== */
+.sena-footer {
+  margin-top: 5rem;
+  background-color: #ffffff;
+  border-top: 1px solid var(--fluent-card-border);
+  padding: 3rem 0 1.5rem;
+}
+
+.sena-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .sena-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.sena-footer-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.sena-footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sena-footer-link {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.sena-footer-link:hover {
+  color: var(--sena-green-primary);
+}
+
+.sena-footer-bottom {
+  border-top: 1px solid var(--fluent-surface-container-low);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

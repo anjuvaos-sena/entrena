@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ modo }} convocatoria | ENI{% endblock %}
+
+{% block content %}
+<section class="container py-4 py-lg-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-9">
+            <div class="mb-4">
+                <span class="sena-chip mb-3">Panel administrativo</span>
+                <h1 class="h2 mb-2">{{ modo }} convocatoria</h1>
+                <p class="text-lead mb-0">Completa todos los datos requeridos para gestionar la capacitación.</p>
+            </div>
+
+            <div class="fluent-card">
+                {% if errores %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Revisa el formulario.</strong>
+                        <ul class="mb-0 mt-2">
+                            {% for nombre, mensaje in errores.items %}
+                                <li>{{ mensaje }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% if modo == 'Crear' %}{% url 'app_convocatorias:gestionar_convocatorias' %}{% else %}{% url 'app_convocatorias:detalle_convocatoria' convocatoria.id %}{% endif %}" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold" for="titulo">Título</label>
+                        <input class="form-control sena-input" id="titulo" name="titulo" value="{{ datos.titulo|default:'' }}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold" for="area">Área</label>
+                        <input class="form-control sena-input" id="area" name="area" value="{{ datos.area|default:'' }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="descripcion">Descripción</label>
+                        <textarea class="form-control sena-input" id="descripcion" name="descripcion" rows="5" required>{{ datos.descripcion|default:'' }}</textarea>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold" for="fecha_inicio">Fecha de inicio</label>
+                        <input class="form-control sena-input" id="fecha_inicio" name="fecha_inicio" type="date" value="{{ datos.fecha_inicio|default:'' }}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold" for="fecha_final">Fecha final</label>
+                        <input class="form-control sena-input" id="fecha_final" name="fecha_final" type="date" value="{{ datos.fecha_final|default:'' }}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold" for="ciudad">Ciudad</label>
+                        <input class="form-control sena-input" id="ciudad" name="ciudad" value="{{ datos.ciudad|default:'' }}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold" for="cupos_totales">Cupos totales</label>
+                        <input class="form-control sena-input" id="cupos_totales" name="cupos_totales" type="number" min="0" value="{{ datos.cupos_totales|default:'' }}" required>
+                    </div>
+                    {% if modo == 'Crear' %}
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="estado">Estado</label>
+                            <select class="form-select sena-select" id="estado" name="estado" disabled>
+                                <option selected>Borrador</option>
+                            </select>
+                            <small class="form-text text-muted">El sistema establece este estado automáticamente al crear.</small>
+                        </div>
+                    {% else %}
+                        <div class="col-12 col-md-6">
+                            <div class="alert alert-secondary mb-0">Estado actual: <strong>{{ convocatoria.estado }}</strong>. Usa la opción “Modificar estado” para cambiarlo.</div>
+                        </div>
+                    {% endif %}
+                    <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4">
+                        <a class="sena-btn sena-btn-outline" href="{% url 'app_convocatorias:gestionar_convocatorias' %}">Cancelar</a>
+                        <button class="sena-btn sena-btn-primary" type="submit">Guardar convocatoria</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

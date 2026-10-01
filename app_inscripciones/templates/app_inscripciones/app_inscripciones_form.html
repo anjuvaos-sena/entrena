@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscripción | ENI{% endblock %}
+
+{% block content %}
+<section class="container py-4 py-lg-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-9">
+            <div class="mb-4">
+                <span class="sena-chip mb-3">Inscripción de instructor</span>
+                <h1 class="h2 mb-2">{{ convocatoria.titulo }}</h1>
+                <p class="text-lead mb-0">Completa tus datos y adjunta los requisitos exigidos.</p>
+            </div>
+
+            <div class="fluent-card">
+                {% if confirmacion %}
+                    <div class="alert alert-success" role="alert">
+                        <h2 class="h5">Inscripción realizada correctamente</h2>
+                        <p class="mb-3">Tus datos fueron registrados y el cupo quedó asignado.</p>
+                        <a class="sena-btn sena-btn-primary" href="{% url 'app_inscripciones:capacitaciones_publicadas' %}">Volver a capacitaciones</a>
+                    </div>
+                {% else %}
+                    {% if errores %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Revisa el formulario.</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for nombre, mensaje in errores.items %}
+                                    <li>{{ mensaje }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data" class="row g-3">
+                        {% csrf_token %}
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="numero_identificacion">Número de identificación</label>
+                            <input class="form-control sena-input" id="numero_identificacion" name="numero_identificacion" value="{{ datos.numero_identificacion|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="nombres">Nombres</label>
+                            <input class="form-control sena-input" id="nombres" name="nombres" value="{{ datos.nombres|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="apellidos">Apellidos</label>
+                            <input class="form-control sena-input" id="apellidos" name="apellidos" value="{{ datos.apellidos|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="correo_electronico">Correo electrónico</label>
+                            <input class="form-control sena-input" id="correo_electronico" name="correo_electronico" type="email" value="{{ datos.correo_electronico|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="telefono">Teléfono</label>
+                            <input class="form-control sena-input" id="telefono" name="telefono" value="{{ datos.telefono|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="centro_formacion">Centro de formación</label>
+                            <input class="form-control sena-input" id="centro_formacion" name="centro_formacion" value="{{ datos.centro_formacion|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="regional">Regional</label>
+                            <input class="form-control sena-input" id="regional" name="regional" value="{{ datos.regional|default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold" for="archivo_pdf">Requisitos exigidos (PDF)</label>
+                            <input class="form-control sena-input" id="archivo_pdf" name="archivo_pdf" type="file" accept="application/pdf,.pdf" required>
+                            <small class="form-text text-muted">Solo se acepta un archivo PDF.</small>
+                        </div>
+                        <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4">
+                            <a class="sena-btn sena-btn-outline" href="{% url 'app_inscripciones:capacitaciones_publicadas' %}">Cancelar</a>
+                            <button class="sena-btn sena-btn-primary" type="submit">Confirmar inscripción</button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

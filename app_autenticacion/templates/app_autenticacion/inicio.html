@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio | ENI{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="fluent-card text-center mx-auto" style="max-width: 720px;">
+        <span class="sena-chip mb-3">Área personal</span>
+        <h1 class="h2 mb-3">Bienvenido, {{ user.username }}</h1>
+        <p class="text-lead mb-4">Tu sesión está activa.</p>
+        <a class="sena-btn sena-btn-primary" href="{% url 'logout' %}">Cerrar sesión</a>
+    </div>
+</section>
+{% endblock %}

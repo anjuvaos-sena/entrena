@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar convocatoria | ENI{% endblock %}
+
+{% block content %}
+<section class="container py-4 py-lg-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div>
+            <span class="sena-chip mb-3">Consulta administrativa</span>
+            <h1 class="h2 mb-2">{{ convocatoria.titulo }}</h1>
+            <p class="text-lead mb-0">Estadísticas e instructores inscritos en la convocatoria.</p>
+        </div>
+        <a class="sena-btn sena-btn-outline" href="{% url 'app_convocatorias:gestionar_convocatorias' %}">Volver al listado</a>
+    </div>
+
+    <div class="fluent-card mb-4">
+        <div class="row g-3">
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="text-muted text-sm d-block">Área</span>
+                <strong>{{ convocatoria.area }}</strong>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="text-muted text-sm d-block">Ciudad</span>
+                <strong>{{ convocatoria.ciudad }}</strong>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="text-muted text-sm d-block">Fechas</span>
+                <strong>{{ convocatoria.fecha_inicio|date:'d/m/Y' }} al {{ convocatoria.fecha_final|date:'d/m/Y' }}</strong>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <span class="text-muted text-sm d-block">Estado</span>
+                <span class="sena-badge sena-badge-tag">{{ convocatoria.estado }}</span>
+            </div>
+            <div class="col-12">
+                <span class="text-muted text-sm d-block">Descripción</span>
+                <p class="mb-0">{{ convocatoria.descripcion }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="sena-kpi-grid mb-4">
+        <div class="sena-kpi-item">
+            <div>
+                <div class="sena-kpi-value">{{ inscritos }}</div>
+                <div class="sena-kpi-label">Instructores inscritos</div>
+            </div>
+        </div>
+        <div class="sena-kpi-item">
+            <div>
+                <div class="sena-kpi-value">{{ porcentaje_inscripcion }}%</div>
+                <div class="sena-kpi-label">Porcentaje de inscripción</div>
+            </div>
+        </div>
+        <div class="sena-kpi-item">
+            <div>
+                <div class="sena-kpi-value">{{ convocatoria.cupos_asignados }} / {{ convocatoria.cupos_totales }}</div>
+                <div class="sena-kpi-label">Cupos asignados</div>
+            </div>
+        </div>
+    </div>
+      
+    <div class="fluent-card mb-4">
+        <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+            <h2 class="h5 mb-0">Nivel de inscripción</h2>
+            <strong>{{ porcentaje_inscripcion }}%</strong>
+        </div>
+        <div class="progress" role="img" aria-label="Porcentaje de inscripción: {{ porcentaje_inscripcion }}%">
+            <div class="progress-bar bg-success" style="--progress-width: {{ porcentaje_grafica }}%; width: var(--progress-width);"></div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
+        <div>
+            <h2 class="h4 mb-1">Instructores inscritos</h2>
+            <p class="text-muted mb-0">Listado actualizado de inscripciones válidas.</p>
+        </div>
+    </div>
+
+    {% if inscripciones %}
+        <div class="fluent-card p-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="px-3 py-3">Identificación</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Correo electrónico</th>
+                            <th>Teléfono</th>
+                            <th>Centro de formación</th>
+                            <th>Regional</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscripcion in inscripciones %}
+                            <tr>
+                                <td class="px-3">{{ inscripcion.numero_identificacion }}</td>
+                                <td>{{ inscripcion.nombres }}</td>
+                                <td>{{ inscripcion.apellidos }}</td>
+                                <td>{{ inscripcion.correo_electronico }}</td>
+                                <td>{{ inscripcion.telefono }}</td>
+                                <td>{{ inscripcion.centro_formacion }}</td>
+                                <td>{{ inscripcion.regional }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="fluent-card text-center py-5">
+            <h2 class="h4">No hay inscripciones</h2>
+            <p class="mb-0">Aún no hay instructores inscritos en esta convocatoria.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

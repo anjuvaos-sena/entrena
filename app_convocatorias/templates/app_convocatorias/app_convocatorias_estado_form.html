@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Modificar estado | ENI{% endblock %}
+
+{% block content %}
+<section class="container py-4 py-lg-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7 col-lg-5">
+            <div class="fluent-card">
+                <span class="sena-chip mb-3">Panel administrativo</span>
+                <h1 class="h3 mb-2">Modificar estado</h1>
+                <p class="text-muted mb-4">{{ convocatoria.titulo }}</p>
+
+                {% if errores.estado %}
+                    <div class="alert alert-danger" role="alert">{{ errores.estado }}</div>
+                {% endif %}
+
+                <form method="post" class="vstack gap-3">
+                    {% csrf_token %}
+                    <div>
+                        <label class="form-label fw-semibold" for="estado">Estado</label>
+                        <select class="form-select sena-select" id="estado" name="estado" required>
+                            {% for valor, etiqueta in estados %}
+                                <option value="{{ valor }}" {% if valor == convocatoria.estado %}selected{% endif %}>{{ etiqueta }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-3">
+                        <a class="sena-btn sena-btn-outline" href="{% url 'app_convocatorias:gestionar_convocatorias' %}">Cancelar</a>
+                        <button class="sena-btn sena-btn-primary" type="submit">Guardar estado</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
